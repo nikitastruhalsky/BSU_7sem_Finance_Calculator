@@ -17,4 +17,4 @@ with st.form("Calculator"):
             elif option == '-':
                 st.write(f'Result: {(num1 - num2):.20f}')
         except:
-            st.write('Invalid values')
+            st.write('Wrong values')
