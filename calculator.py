@@ -28,8 +28,12 @@ def more_priority(op1: str, op2: str) -> bool:
         return False
 
 
+def format_spaces(num: Decimal) -> str:
+    return '{:,}'.format(num).replace(',', ' ')
+
+
 def format_num(num: Decimal) -> str:
-    num = '{:,}'.format(num).replace(',', ' ')
+    num = format_spaces(num)
     num = num.rstrip("0")
     if num[-1] == '.':
         num = num[:-1]
@@ -52,7 +56,16 @@ with st.form("Finance Calculator"):
     submitted = st.form_submit_button("Calculate")
     if submitted:
         try:
+            for x in nums:
+                if "e" in x:
+                    raise Exception
+            check_nums = nums.copy()
             nums = [Decimal(x.replace(',', '.').replace(' ', '')) for x in nums]
+            for str_num, num in zip(check_nums, nums):
+                if str_num.count(" ") == 0:
+                    continue
+                if format_spaces(num) != str_num:
+                    raise Exception
             if has_zero_division(nums, options):
                 st.write("Mistake! Division by zero!")
             else:
