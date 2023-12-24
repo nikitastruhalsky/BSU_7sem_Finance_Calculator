@@ -27,7 +27,7 @@ with st.form("Finance Calculator"):
         options.append(st.selectbox(label=f'Operation {i + 1}', options=["+", "-", "*", "/"]))
     round_options = {"Math": decimal.ROUND_HALF_UP,
                      "Accountant": decimal.ROUND_HALF_EVEN,
-                     "Floor": decimal.ROUND_FLOOR}
+                     "Floor": None}
     selected_round_option = round_options[st.selectbox(label="Choose rounding type", options=round_options.keys())]
     submitted = st.form_submit_button("Calculate")
     if submitted:
@@ -82,7 +82,10 @@ with st.form("Finance Calculator"):
                 if str(full_res)[-1] == '.':
                     full_res = full_res[:-1]
 
-                rounded_res = temp.quantize(no_digits_after_comma, rounding=selected_round_option)
+                if selected_round_option is None:
+                    rounded_res = str(temp).split('.')[0]
+                else:
+                    rounded_res = temp.quantize(no_digits_after_comma, rounding=selected_round_option)
                 st.write(f'Answer: {full_res}'.replace(',', '.'))
                 st.write(f'Rounded Answer: {rounded_res}'.replace(',', '.'))
         except:
